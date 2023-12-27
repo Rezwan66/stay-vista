@@ -7,7 +7,8 @@ import Loader from '../Shared/Loader';
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
-  const [params, setParams] = useSearchParams();
+  // const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const category = params.get('category');
   useEffect(() => {
