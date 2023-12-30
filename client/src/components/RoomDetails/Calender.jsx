@@ -5,11 +5,11 @@ const Calender = ({ value, handleSelect }) => {
   return (
     <DateRange
       rangeColors={['#F43F5E']}
-      // ranges={[value]}
+      ranges={[value]}
       // onChange={handleSelect}
       // date={value.startDate}
-      // direction="vertical"
-      // showDateDisplay={false}
+      direction="vertical"
+      showDateDisplay={false}
       // minDate={value.startDate}
       // maxDate={value.endDate}
     />
