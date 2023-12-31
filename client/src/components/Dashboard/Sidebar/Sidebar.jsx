@@ -7,7 +7,8 @@ import ToggleBtn from '../../Button/ToggleBtn';
 import { GrLogout } from 'react-icons/gr';
 import { FcSettings } from 'react-icons/fc';
 import { AiOutlineBars } from 'react-icons/ai';
-import { BsGraphUp } from 'react-icons/bs';
+import { BsFillHouseAddFill, BsGraphUp } from 'react-icons/bs';
+import { MdHomeWork } from 'react-icons/md';
 
 const Sidebar = () => {
   const [toggle, setToggle] = useState(false);
@@ -63,6 +64,16 @@ const Sidebar = () => {
               />
 
               {/* Menu Items */}
+              <MenuItem
+                icon={BsFillHouseAddFill}
+                label="Add Room"
+                address="add-room"
+              />
+              <MenuItem
+                icon={MdHomeWork}
+                label="My Listings"
+                address="my-listings"
+              />
             </nav>
           </div>
         </div>
