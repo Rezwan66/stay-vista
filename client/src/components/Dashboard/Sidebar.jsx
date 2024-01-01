@@ -1,8 +1,8 @@
 import { useState } from 'react';
 // Components
-import Logo from '../../Shared/Logo';
+import Logo from '../Shared/Logo';
 import MenuItem from './MenuItem';
-import ToggleBtn from '../../Button/ToggleBtn';
+import ToggleBtn from '../Button/ToggleBtn';
 // Icons
 import { GrLogout } from 'react-icons/gr';
 import { FcSettings } from 'react-icons/fc';

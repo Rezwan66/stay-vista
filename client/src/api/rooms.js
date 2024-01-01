@@ -13,3 +13,9 @@ export const getRoom = async id => {
   //   during axiosSecure/axios get request, we can leave out the get keyword!
   return data;
 };
+
+// Save room data in db
+export const addRoom = async roomData => {
+  const { data } = await axiosSecure.post('/rooms', roomData);
+  return data;
+};
