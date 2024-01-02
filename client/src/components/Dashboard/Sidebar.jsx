@@ -7,15 +7,19 @@ import ToggleBtn from '../Button/ToggleBtn';
 import { GrLogout } from 'react-icons/gr';
 import { FcSettings } from 'react-icons/fc';
 import { AiOutlineBars } from 'react-icons/ai';
-import { BsFillHouseAddFill, BsGraphUp } from 'react-icons/bs';
-import { MdHomeWork } from 'react-icons/md';
+import { BsGraphUp } from 'react-icons/bs';
 import useAuth from '../../hooks/useAuth';
+import useRole from '../../hooks/useRole';
+import HostMenu from './Sidebar/HostMenu';
+import GuestMenu from './Sidebar/GuestMenu';
+import AdminMenu from './Sidebar/AdminMenu';
 
 const Sidebar = () => {
   const [toggle, setToggle] = useState(false);
   const [isActive, setActive] = useState(false);
   const { logOut } = useAuth();
-
+  const [role] = useRole();
+  console.log(role, toggle);
   //   For guest/host menu item toggle button
   const toggleHandler = event => {
     setToggle(event.target.checked);
@@ -47,6 +51,7 @@ const Sidebar = () => {
           isActive && '-translate-x-full'
         }  md:translate-x-0  transition duration-200 ease-in-out`}
       >
+        {/* menu items */}
         <div>
           <div>
             <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-rose-100 mx-auto">
@@ -57,7 +62,7 @@ const Sidebar = () => {
           {/* Nav Items */}
           <div className="flex flex-col justify-between flex-1 mt-6">
             {/* If a user is host */}
-            <ToggleBtn toggleHandler={toggleHandler} />
+            {role === 'host' && <ToggleBtn toggleHandler={toggleHandler} />}
             <nav>
               <MenuItem
                 icon={BsGraphUp}
@@ -65,21 +70,14 @@ const Sidebar = () => {
                 address="/dashboard"
               />
 
-              {/* Menu Items */}
-              <MenuItem
-                icon={BsFillHouseAddFill}
-                label="Add Room"
-                address="add-room"
-              />
-              <MenuItem
-                icon={MdHomeWork}
-                label="My Listings"
-                address="my-listings"
-              />
+              {/* Conditional Menu Items */}
+              {role === 'guest' && <GuestMenu />}
+              {role === 'host' ? toggle ? <HostMenu /> : <GuestMenu /> : ''}
+              {role === 'admin' && <AdminMenu />}
             </nav>
           </div>
         </div>
-
+        {/* profile+logout */}
         <div>
           <hr />
 
