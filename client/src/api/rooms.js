@@ -7,10 +7,17 @@ export const getAllRooms = async () => {
   return data;
 };
 
+// fetch all rooms for the signed in host
+export const getHostRooms = async email => {
+  const { data } = await axiosSecure(`/rooms/${email}`);
+  // we used params instead of query here because if email is undefined, then all rooms will load for that host.
+  return data;
+};
+
 // fetch single room data from db
 export const getRoom = async id => {
   const { data } = await axiosSecure(`/room/${id}`);
-  //   during axiosSecure/axios get request, we can leave out the get keyword!
+  // during axiosSecure/axios get request, we can leave out the get keyword!
   return data;
 };
 
