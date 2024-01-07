@@ -13,6 +13,7 @@ import MyListings from '../pages/Dashboard/Host/MyListings';
 import HostRoute from './HostRoute';
 import AdminRoute from './AdminRoute';
 import ManageUsers from '../pages/Dashboard/Admin/ManageUsers';
+import Profile from '../pages/Dashboard/Common/Profile';
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,14 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      {
+        path: 'profile',
+        element: (
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        ),
+      },
       // host routes
       {
         path: 'add-room',
