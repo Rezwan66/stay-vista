@@ -2,8 +2,10 @@ import { formatDistance } from 'date-fns';
 import Button from '../Button/Button';
 import Calender from './Calender';
 import { useState } from 'react';
+import BookingModal from '../Modal/BookingModal';
 
 const RoomReservation = ({ room }) => {
+  let [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState({
     startDate: new Date(room?.from),
     endDate: new Date(room?.to),
@@ -14,6 +16,11 @@ const RoomReservation = ({ room }) => {
     formatDistance(new Date(room?.to), new Date(room?.from)).split(' ')[0]
   );
   const totalPrice = totalDays * room?.price;
+  const [bookingInfo, setBookingInfo] = useState({});
+  // function to close the modal
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   return (
     <div className="rounded-xl border-[1px] border-neutral-200 overflow-hidden bg-white">
@@ -27,13 +34,15 @@ const RoomReservation = ({ room }) => {
       </div>
       <hr />
       <div className="p-4">
-        <Button label={'Reserve'} />
+        <Button onClick={() => setIsOpen(true)} label={'Reserve'} />
       </div>
       <hr />
       <div className="p-4 flex items-center justify-between font-semibold text-lg">
         <div>Total</div>
         <div>$ {totalPrice}</div>
       </div>
+
+      <BookingModal closeModal={closeModal} isOpen={isOpen} />
     </div>
   );
 };
