@@ -3,9 +3,11 @@ import Button from '../Button/Button';
 import Calender from './Calender';
 import { useState } from 'react';
 import BookingModal from '../Modal/BookingModal';
+import useAuth from '../../hooks/useAuth';
 
 const RoomReservation = ({ room }) => {
   let [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
   const [value, setValue] = useState({
     startDate: new Date(room?.from),
     endDate: new Date(room?.to),
@@ -16,7 +18,21 @@ const RoomReservation = ({ room }) => {
     formatDistance(new Date(room?.to), new Date(room?.from)).split(' ')[0]
   );
   const totalPrice = totalDays * room?.price;
-  const [bookingInfo, setBookingInfo] = useState({});
+  const [bookingInfo, setBookingInfo] = useState({
+    guest: {
+      name: user?.displayName,
+      email: user?.email,
+      image: user?.photoURL,
+    },
+    host: room?.host?.email,
+    location: room?.location,
+    price: totalPrice,
+    to: value.endDate,
+    from: value.startDate,
+    title: room?.title,
+    roomId: room?._id,
+    image: room?.image,
+  });
   // function to close the modal
   const closeModal = () => {
     setIsOpen(false);
@@ -42,7 +58,11 @@ const RoomReservation = ({ room }) => {
         <div>$ {totalPrice}</div>
       </div>
 
-      <BookingModal closeModal={closeModal} isOpen={isOpen} />
+      <BookingModal
+        closeModal={closeModal}
+        isOpen={isOpen}
+        bookingInfo={bookingInfo}
+      />
     </div>
   );
 };
