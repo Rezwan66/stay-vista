@@ -7,6 +7,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
 const port = process.env.PORT || 8000;
+const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY);
 
 // middleware
 const corsOptions = {
@@ -46,6 +47,7 @@ async function run() {
     // collections
     const usersCollection = client.db('stayVistaDB').collection('users');
     const roomsCollection = client.db('stayVistaDB').collection('rooms');
+    const bookingsCollection = client.db('stayVistaDB').collection('bookings');
 
     // auth related api
     app.post('/jwt', async (req, res) => {
@@ -127,6 +129,40 @@ async function run() {
     app.post('/rooms', verifyToken, async (req, res) => {
       const room = req.body;
       const result = await roomsCollection.insertOne(room);
+      res.send(result);
+    });
+    // Update room status after payment
+    app.patch('/rooms/status/:id', async (req, res) => {
+      const id = req.params.id;
+      const status = req.body;
+      const query = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          booked: status,
+        },
+      };
+      const result = await roomsCollection.updateOne(query, updateDoc);
+      res.send(result);
+    });
+
+    // generate client secret for stripe payment
+    app.post('/create-payment-intent', verifyToken, async (req, res) => {
+      const { price } = req.body;
+      const amount = parseInt(price * 100); //stripe only recognizes price in cents;
+      if (!price || amount < 1) return;
+      const { client_secret } = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: 'usd',
+        payment_method_types: ['card'],
+      });
+      res.send({ clientSecret: client_secret }); //send the paymentIntent object's client_secret to the client side
+    });
+
+    // save booking info in booking collection
+    app.post('/bookings', verifyToken, async (req, res) => {
+      const booking = await req.body;
+      const result = await bookingsCollection.insertOne(booking);
+      // send Email................
       res.send(result);
     });
 
