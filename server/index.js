@@ -134,7 +134,7 @@ async function run() {
     // Update room status after payment
     app.patch('/rooms/status/:id', async (req, res) => {
       const id = req.params.id;
-      const status = req.body;
+      const { status } = req.body;
       const query = { _id: new ObjectId(id) };
       const updateDoc = {
         $set: {
