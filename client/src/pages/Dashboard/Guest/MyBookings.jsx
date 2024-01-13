@@ -1,6 +1,20 @@
 import { Helmet } from 'react-helmet-async';
+import useAuth from '../../../hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import { getBookings } from '../../../api/bookings';
 
 const MyBookings = () => {
+  const { user, loading } = useAuth();
+  const {
+    data: bookings = [],
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['bookings', user?.email],
+    enabled: !loading,
+    queryFn: async () => await getBookings(user?.email),
+  });
+  console.log(bookings);
   return (
     <>
       <Helmet>

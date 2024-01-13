@@ -131,6 +131,27 @@ async function run() {
       const result = await roomsCollection.insertOne(room);
       res.send(result);
     });
+
+    // CHECKOUT AND PAYMENT RELATED API
+    // generate client secret for stripe payment
+    app.post('/create-payment-intent', verifyToken, async (req, res) => {
+      const { price } = req.body;
+      const amount = parseInt(price * 100); //stripe only recognizes price in cents;
+      if (!price || amount < 1) return;
+      const { client_secret } = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: 'usd',
+        payment_method_types: ['card'],
+      });
+      res.send({ clientSecret: client_secret }); //send the paymentIntent object's client_secret to the client side
+    });
+    // save booking info in booking collection
+    app.post('/bookings', verifyToken, async (req, res) => {
+      const booking = await req.body;
+      const result = await bookingsCollection.insertOne(booking);
+      // send Email................
+      res.send(result);
+    });
     // Update room status after payment
     app.patch('/rooms/status/:id', async (req, res) => {
       const id = req.params.id;
@@ -144,25 +165,20 @@ async function run() {
       const result = await roomsCollection.updateOne(query, updateDoc);
       res.send(result);
     });
-
-    // generate client secret for stripe payment
-    app.post('/create-payment-intent', verifyToken, async (req, res) => {
-      const { price } = req.body;
-      const amount = parseInt(price * 100); //stripe only recognizes price in cents;
-      if (!price || amount < 1) return;
-      const { client_secret } = await stripe.paymentIntents.create({
-        amount: amount,
-        currency: 'usd',
-        payment_method_types: ['card'],
-      });
-      res.send({ clientSecret: client_secret }); //send the paymentIntent object's client_secret to the client side
+    // get all bookings for guest
+    app.get('/bookings', verifyToken, async (req, res) => {
+      const email = req.query.email;
+      if (!email) return res.send([]);
+      const query = { 'guest.email': email };
+      const result = await bookingsCollection.find(query).toArray();
+      res.send(result);
     });
-
-    // save booking info in booking collection
-    app.post('/bookings', verifyToken, async (req, res) => {
-      const booking = await req.body;
-      const result = await bookingsCollection.insertOne(booking);
-      // send Email................
+    // get all bookings for host
+    app.get('/bookings/host', verifyToken, async (req, res) => {
+      const email = req.query.email;
+      if (!email) return res.send([]);
+      const query = { host: email };
+      const result = await bookingsCollection.find(query).toArray();
       res.send(result);
     });
 
