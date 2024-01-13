@@ -187,6 +187,21 @@ async function run() {
       const result = await usersCollection.find().toArray();
       res.send(result);
     });
+    // update user role: admin
+    app.put('/users/update/:email', verifyToken, async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+      const query = { email: email };
+      const options = { upsert: true }; // in the future we may want to add a new property or field for a user.
+      const updateDoc = {
+        $set: {
+          ...user,
+          timestamp: Date.now(),
+        },
+      };
+      const result = await usersCollection.updateOne(query, updateDoc, options);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db('admin').command({ ping: 1 });
