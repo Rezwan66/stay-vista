@@ -6,7 +6,7 @@ import { useState } from 'react';
 import useAuth from '../../../hooks/useAuth';
 import HostModal from '../../Modal/HostRequestModal';
 import { becomeHost } from '../../../api/auth';
-import { toast } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const GuestMenu = () => {
   const [role] = useRole();

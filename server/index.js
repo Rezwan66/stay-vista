@@ -59,6 +59,15 @@ async function run() {
         return res.status(401).send({ message: 'unauthorized access' });
       next();
     };
+    // For Hosts
+    const verifyHost = async (req, res, next) => {
+      const user = req.user; // we can access this from the req object since verifyToken set it to req
+      const query = { email: user?.email };
+      const result = await usersCollection.findOne(query);
+      if (!result || result?.role !== 'host')
+        return res.status(401).send({ message: 'unauthorized access' });
+      next();
+    };
 
     // auth related api
     app.post('/jwt', async (req, res) => {
@@ -138,7 +147,7 @@ async function run() {
       res.send(result);
     });
     // get rooms for host
-    app.get('/rooms/:email', async (req, res) => {
+    app.get('/rooms/:email', verifyToken, verifyHost, async (req, res) => {
       const email = req.params.email;
       const result = await roomsCollection
         .find({ 'host.email': email })
@@ -200,7 +209,7 @@ async function run() {
       res.send(result);
     });
     // get all bookings for host
-    app.get('/bookings/host', verifyToken, async (req, res) => {
+    app.get('/bookings/host', verifyToken, verifyHost, async (req, res) => {
       const email = req.query.email;
       if (!email) return res.send([]);
       const query = { host: email };
