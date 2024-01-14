@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
 const port = process.env.PORT || 8000;
 const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY);
+const nodemailer = require('nodemailer');
 
 // middleware
 const corsOptions = {
@@ -35,6 +36,44 @@ const verifyToken = async (req, res, next) => {
   });
 };
 
+// send Email using Nodemailer
+const sendEmail = (emailAddress, emailData) => {
+  // Create a transporter
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.MAIL,
+      pass: process.env.PASS,
+    },
+  });
+  // Verify connection
+  transporter.verify((error, success) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Server is ready to send Emails', success);
+    }
+  });
+  // Mail body
+  const mailBody = {
+    from: process.env.MAIL,
+    to: emailAddress,
+    subject: emailData?.subject,
+    html: `<p>${emailData?.message}</p>`,
+  };
+  // Send Email
+  transporter.sendMail(mailBody, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+};
+
 const client = new MongoClient(process.env.DB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -44,6 +83,7 @@ const client = new MongoClient(process.env.DB_URI, {
 });
 async function run() {
   try {
+    // sendEmail('wierd.monster@gmail.com', { subject: 'hello email' });
     // collections
     const usersCollection = client.db('stayVistaDB').collection('users');
     const roomsCollection = client.db('stayVistaDB').collection('rooms');
@@ -185,6 +225,19 @@ async function run() {
       const booking = await req.body;
       const result = await bookingsCollection.insertOne(booking);
       // send Email................
+      // Send Email.....
+      if (result.insertedId) {
+        // To guest
+        sendEmail(booking.guest.email, {
+          subject: 'Booking Successful!',
+          message: `Your room is ready. Your Transaction Id: ${booking.transactionId}`,
+        });
+        // To Host
+        sendEmail(booking.host, {
+          subject: 'Your room got booked!',
+          message: `Tidy your room! ${booking.guest.name} is arriving.....`,
+        });
+      }
       res.send(result);
     });
     // Update room status after payment
