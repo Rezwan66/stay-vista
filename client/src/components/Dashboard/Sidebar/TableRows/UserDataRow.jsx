@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import UpdateUserModal from '../../Modal/UpdateUserModal';
-import { updateRole } from '../../../api/auth';
+import UpdateUserModal from '../../../Modal/UpdateUserModal';
+import { updateRole } from '../../../../api/auth';
 import { toast } from 'react-hot-toast';
 
 const UserDataRow = ({ user, refetch }) => {

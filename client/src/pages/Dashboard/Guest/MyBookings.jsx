@@ -3,7 +3,7 @@ import useAuth from '../../../hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { getBookings } from '../../../api/bookings';
 import Loader from '../../../components/Shared/Loader';
-import TableRow from '../../../components/Dashboard/TableRows/TableRow';
+import TableRow from '../../../components/Dashboard/Sidebar/TableRows/TableRow';
 
 const MyBookings = () => {
   const { user, loading } = useAuth();

@@ -1,4 +1,4 @@
-import MenuItem from '../MenuItem';
+import MenuItem from '../Sidebar/MenuItem';
 import { BsFillHouseAddFill } from 'react-icons/bs';
 import { MdHomeWork, MdOutlineManageHistory } from 'react-icons/md';
 const HostMenu = () => {

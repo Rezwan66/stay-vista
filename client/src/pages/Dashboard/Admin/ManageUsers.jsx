@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 import { getAllUsers } from '../../../api/auth';
-import UserDataRow from '../../../components/Dashboard/TableRows/UserDataRow';
+import UserDataRow from '../../../components/Dashboard/Sidebar/TableRows/UserDataRow';
 
 const ManageUsers = () => {
   const { data: users = [], refetch } = useQuery({
