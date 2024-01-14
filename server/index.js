@@ -196,7 +196,7 @@ async function run() {
       const updateDoc = {
         $set: {
           ...user,
-          timestamp: Date.now(),
+          timestamp: Date.now(), //timestamp: Date.now()
         },
       };
       const result = await usersCollection.updateOne(query, updateDoc, options);

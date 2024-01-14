@@ -35,3 +35,14 @@ export const getAllUsers = async () => {
   const { data } = await axiosSecure(`/users`);
   return data;
 };
+
+// update user data in the database
+export const updateRole = async ({ email, role }) => {
+  const currentUser = {
+    email,
+    role,
+    status: 'Verified',
+  };
+  const { data } = await axiosSecure.put(`/users/update/${email}`, currentUser);
+  return data;
+};
