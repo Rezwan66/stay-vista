@@ -12,7 +12,12 @@ const nodemailer = require('nodemailer');
 
 // middleware
 const corsOptions = {
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://stay-vista-71ed2.web.app',
+    'https://stay-vista-71ed2.firebaseapp.com',
+  ],
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -83,7 +88,6 @@ const client = new MongoClient(process.env.DB_URI, {
 });
 async function run() {
   try {
-    // sendEmail('wierd.monster@gmail.com', { subject: 'hello email' });
     // collections
     const usersCollection = client.db('stayVistaDB').collection('users');
     const roomsCollection = client.db('stayVistaDB').collection('rooms');
