@@ -4,7 +4,7 @@
 
 A simple user-friendly hotel booking platform like Airbnb, where users can browse, filter, book, and manage accommodation. The website serves both guests and hosts, facilitating property listings, bookings & secure transactions. There are also Admin roles where an Admin can monitor overall statistics and manage user roles.
 
-![Alt text](stayVista.png)
+![Homepage screenshot](stayVista.png)
 
 # stay-vista-resources
 
