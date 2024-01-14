@@ -22,13 +22,13 @@ const GuestMenu = () => {
       const data = await becomeHost(user?.email);
       if (data.modifiedCount > 0) {
         toast.success('Success! Requested to be a Host.');
-        setIsOpen(false);
       } else {
         toast.success('Please wait for Admin approval ✋');
-        setIsOpen(false);
       }
     } catch (err) {
       toast.error(err.message);
+    } finally {
+      setIsOpen(false);
     }
   };
   return (
