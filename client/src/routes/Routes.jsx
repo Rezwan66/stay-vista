@@ -16,6 +16,7 @@ import ManageUsers from '../pages/Dashboard/Admin/ManageUsers';
 import Profile from '../pages/Dashboard/Common/Profile';
 import MyBookings from '../pages/Dashboard/Guest/MyBookings';
 import ManageBookings from '../pages/Dashboard/Host/ManageBookings';
+import Statistics from '../pages/Dashboard/Common/Statistics';
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      // common routes
       {
         path: 'profile',
         element: (
@@ -104,6 +106,14 @@ export const router = createBrowserRouter([
             <AdminRoute>
               <ManageUsers />
             </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        index: true,
+        element: (
+          <PrivateRoute>
+            <Statistics />
           </PrivateRoute>
         ),
       },
